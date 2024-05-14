@@ -4,6 +4,8 @@
 #' @param ... Additional arguments to pass to `make_requests`. Including base `url` and `api_secret`.
 #'
 #' @return
+#' @import httr2
+#' @importFrom data.table rbindlist
 #' @export
 #'
 #' @examples
@@ -11,7 +13,7 @@ run_requests <- function(type = "json", ...) {
   
   reqs <- make_requests(...)
   
-  dats <- lapply(reqs, httr2::req_performa)
+  dats <- lapply(reqs, httr2::req_perform)
   
   if(type == "data.table")
     dats <- lapply(dats, data.table::rbindlist, fill = TRUE)
@@ -29,6 +31,8 @@ run_requests <- function(type = "json", ...) {
 #' @param ... Additional arguments to pass to `make_requests`. Including base `url` and `api_secret`.
 #'
 #' @return
+#' @import httr2
+#' @importFrom data.table rbindlist
 #' @export
 #'
 #' @examples
@@ -36,7 +40,7 @@ save_requests <- function(path = "", suffix = "", type = "json", ...) {
   
   reqs <- make_requests(...)
   
-  dats <- lapply(reqs, httr2::req_performa)
+  dats <- lapply(reqs, httr2::req_perform)
   
   if(type == "data.table")
     dats <- lapply(dats, data.table::rbindlist, fill = TRUE)

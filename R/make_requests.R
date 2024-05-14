@@ -4,17 +4,19 @@
 #' @param api_secret API secret or token as entered when accessing the base URL via a web browser. This API secret is hashed using Secure Hash Algorithm 1 prior to appending to header of API request.
 #' @param schema Schema to be requested. For CGM data use `entries`, for Care Portal Treatments use `treatments`, for Treatment Profiles use `profiles`. and for server status and settings use `status`. 
 #' @param spec Relevant for schema `entries` only. entry id, such as 55cf81bc436037528ec75fa5 or a type filter such as sgv, mbg, etc. Default is 'sgv' which returns sensor glucose values (SGV). 
-#' @param find The query used to find and limit returned data. Supports nested query syntax, for example find[dateString][$gte]=2015-08-27. All find parameters are interpreted as strings. By default the `entries` and `treatments` schemas limit results to the the most recent 10 values from the last 2 days. You can get many more results, by using the date, dateString, and created_at parameters, depending on the type of data you’re looking for. See https://YOUR-SITE.com/api-docs.html for more options. Can use command `find_between` to help create correct query. Not valid and ignored for `profile` and `status` schemas.
+#' @param find The query used to find and limit returned data. Supports nested query syntax, for example `find[dateString][$gte]=2015-08-27`. All find parameters are interpreted as strings. By default the `entries` and `treatments` schemas limit results to the the most recent 10 values from the last 2 days. You can get many more results, by using the date, dateString, and created_at parameters, depending on the type of data you’re looking for. See https://YOUR-SITE.com/api-docs.html for more options. Can use command `find_between` to help create correct query. Not valid and ignored for `profile` and `status` schemas.
 #' @param count By default the `entries` and `treatments` schemas limit results to the the most recent 10 values from the last 2 days. You can get many more results by setting this to a higher number. Can set to `Inf` to get all results between two dates defined in `find`. Not valid and ignored for `profile` and `status` schemas.
 #' 
 #'
 #' @return An HTTP response: an S3 list with class httr2_request.
 #' @import httr2
+#' @importFrom openssl sha1
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' make_request(url = "http://localhost.1337, schema = "entries", spec = "sgv", count = 100)
-#' 
+#' }
 #' 
 #' 
 make_request <- function(url = NULL, api_secret = NULL, schema = "entries", spec = "sgv", find = NULL, count = NULL) {
@@ -56,13 +58,14 @@ make_request <- function(url = NULL, api_secret = NULL, schema = "entries", spec
 #' @param url Base URL for accessing Nightscout of type `https://YOUR-SITE.com`. See https://nightscout-test.readthedocs.io/en/latest/Nightscout/EN/Technical%20info/api.html for further details. `ap/i/v1` is automatically added to the end of the base url when creating the request.
 #' @param api_secret API secret or token as entered when accessing the base URL via a web browser. This API secret is hashed using Secure Hash Algorithm 1 prior to appending to header of API request.
 #' @param schemas Vector of schema to be requested. For CGM data use `entries`, for Care Portal Treatments use `treatments`, for Treatment Profiles use `profiles`. and for server status and settings use `status`.
-#' Relevant for schema `entries` only. entry id, such as 55cf81bc436037528ec75fa5 or a type filter such as sgv, mbg, etc. Default is 'sgv' which returns sensor glucose values (SGV). 
+#' @param spec Relevant for schema `entries` only. entry id, such as 55cf81bc436037528ec75fa5 or a type filter such as sgv, mbg, etc. Default is 'sgv' which returns sensor glucose values (SGV). 
 #' @param date_first First date for `entries` and `treatments` schemas. 
-#' @param date_list Last date for `entries` and `treatments` schemas. 
+#' @param date_last Last date for `entries` and `treatments` schemas. 
 #' @param count By default the `entries` and `treatments` schemas limit results to the the most recent 10 values from the last 2 days. You can get many more results by setting this to a higher number. Can set to `Inf` to get all results between two dates defined in `find`. Not valid and ignored for `profile` and `status` schemas.
 #'
 #' @return A list of HTTP responses: a list of S3 lists with class httr2_request.
 #' @import httr2
+#' @importFrom stats setNames
 #' @export
 #'
 #' @examples
@@ -81,7 +84,7 @@ make_requests <- function(
     schemas = c("entries", "treatments", "profile"), spec = "sgv", 
     date_first = NULL, date_last = NULL, count = NULL) {
   
-  schemas = setNames(schemas, schemas)
+  schemas = stats::setNames(schemas, schemas)
   
   requests <- suppressWarnings(
     lapply(schemas, function(schema) {
