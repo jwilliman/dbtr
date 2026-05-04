@@ -227,8 +227,6 @@ ns_basal_total <- function(treatments) {
 #'
 ns_bolus_total <- function(treatments) {
   
-  unknown_as <- match.arg(unknown_as)
-  
   dat_bolus <- treatments[!is.na(insulin) & insulin > 0]
   
   dat_bolus[
