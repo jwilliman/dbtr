@@ -260,7 +260,7 @@ ns_insulin <- function(treatments) {
   
   
   # Calculate bolus and summarise by day
-  dat_bolus <- ns_bolus(treatments)
+  dat_bolus <- ns_bolus_total(treatments)
   dat_bolus_daily <- dat_bolus[
     , .(n = .N, units = sum(insulin)), by = .(by, bolusType)] |> 
     data.table::dcast(by ~ bolusType, value.var = c("n", "units"), fill = 0)
