@@ -128,11 +128,11 @@ ns_basal_temporary <- function(treatments) {
   
   dat_basal_temps <- treatments[
     !is.na(durationInMilliseconds) & (!is.na(rate)), 
-    .(by, start_epoch = epoch, 
+    .(by = idate_local, start_epoch = epoch, 
       seconds = as.integer(durationInMilliseconds/1000), rate)] |> 
     unique()
   
-  dat_basal_temps[, next_epoch := data.table::shift(start_epoch, type = "lead", fill = max(treats_dt$epoch))]
+  dat_basal_temps[, next_epoch := data.table::shift(start_epoch, type = "lead", fill = max(treatments$epoch))]
   dat_basal_temps[, end_epoch  := pmin(next_epoch, start_epoch + seconds)]
   
   return(dat_basal_temps[, .(by, start_epoch, end_epoch, seconds, rate)])

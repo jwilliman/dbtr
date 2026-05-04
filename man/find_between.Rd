@@ -13,7 +13,7 @@ find_between(x = "dateString", lower = NULL, upper = NULL, inc.bounds = TRUE)
 
 \item{upper}{Upper range bound of length 1. Will be coerced to character if not already.}
 
-\item{inc.bounds}{\code{TRUE} (default) means inclusive bounds, i.e., \link{lower,upper}. \code{FALSE} means exclusive bounds, i.e., (lower,upper).}
+\item{inc.bounds}{\code{TRUE} (default) means inclusive bounds, i.e., \verb{[lower,upper]}. \code{FALSE} means exclusive bounds, i.e., (lower,upper).}
 }
 \value{
 A list of maximum length 2, with expressions to use in later functions like \code{make_request}.

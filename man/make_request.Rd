@@ -22,7 +22,7 @@ make_request(
 
 \item{spec}{Relevant for schema \code{entries} only. entry id, such as 55cf81bc436037528ec75fa5 or a type filter such as sgv, mbg, etc. Default is 'sgv' which returns sensor glucose values (SGV).}
 
-\item{find}{The query used to find and limit returned data. Supports nested query syntax, for example find\link[=$gte]{dateString}=2015-08-27. All find parameters are interpreted as strings. By default the \code{entries} and \code{treatments} schemas limit results to the the most recent 10 values from the last 2 days. You can get many more results, by using the date, dateString, and created_at parameters, depending on the type of data you’re looking for. See https://YOUR-SITE.com/api-docs.html for more options. Can use command \code{find_between} to help create correct query. Not valid and ignored for \code{profile} and \code{status} schemas.}
+\item{find}{The query used to find and limit returned data. Supports nested query syntax, for example \verb{find[dateString][$gte]=2015-08-27}. All find parameters are interpreted as strings. By default the \code{entries} and \code{treatments} schemas limit results to the the most recent 10 values from the last 2 days. You can get many more results, by using the date, dateString, and created_at parameters, depending on the type of data you’re looking for. See https://YOUR-SITE.com/api-docs.html for more options. Can use command \code{find_between} to help create correct query. Not valid and ignored for \code{profile} and \code{status} schemas.}
 
 \item{count}{By default the \code{entries} and \code{treatments} schemas limit results to the the most recent 10 values from the last 2 days. You can get many more results by setting this to a higher number. Can set to \code{Inf} to get all results between two dates defined in \code{find}. Not valid and ignored for \code{profile} and \code{status} schemas.}
 }
@@ -31,4 +31,11 @@ An HTTP response: an S3 list with class httr2_request.
 }
 \description{
 Create single API request to retrieve data from Nightscout
+}
+\examples{
+\dontrun{
+make_request(url = "http://localhost.1337", schema = "entries", spec = "sgv", count = 100)
+}
+
+
 }
