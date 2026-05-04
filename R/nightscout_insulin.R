@@ -234,7 +234,7 @@ ns_bolus_total <- function(treatments) {
       isSMB %in% TRUE, "SMB", "Manual"
     )]
   
-  return(dat_bolus[, .(by, epoch, bolusType, insulin)])
+  return(dat_bolus[, .(by = idate_local, epoch, bolusType, insulin)])
   
 }
 
