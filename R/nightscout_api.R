@@ -26,7 +26,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ns_api_fetch(url = "http://localhost.1337, filename = "entries", count = 100)
+#' ns_api_fetch(url = "http://localhost.1337", filename = "entries", count = 100)
 #' }
 #' 
 #' 
@@ -132,7 +132,7 @@ ns_api_fetch <- function(
 #' @returns Data table
 #' @export
 #'
-#' @examples
+
 ns_read_file <- function(file) {
   
   ## Read in treatments if saved
@@ -161,7 +161,7 @@ ns_read_file <- function(file) {
 #' @returns The data.table is modified by reference (and returned invisibly). 
 #' @export
 #'
-#' @examples
+
 ns_clean_treatments <- function(treatments, tz = NULL) {
   
   ## Determine timezone if not provided

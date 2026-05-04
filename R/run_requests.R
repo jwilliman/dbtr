@@ -3,12 +3,10 @@
 #' @param type Type of data file to output. 'json' as extracted from Nightscout, or 'data' to convert to r `data.table` using `data.table::rbindlist`.
 #' @param ... Additional arguments to pass to `make_requests`. Including base `url` and `api_secret`.
 #'
-#' @return
 #' @import httr2
 #' @importFrom data.table rbindlist
 #' @export
 #'
-#' @examples
 run_requests <- function(type = "json", ...) {
   
   reqs <- make_requests(...)
@@ -30,12 +28,10 @@ run_requests <- function(type = "json", ...) {
 #' @param type Type of data file to output. 'json' as extracted from Nightscout, or 'data' to convert to r `data.table` using `data.table::rbindlist`.
 #' @param ... Additional arguments to pass to `make_requests`. Including base `url` and `api_secret`.
 #'
-#' @return
 #' @import httr2
 #' @importFrom data.table rbindlist
 #' @export
 #'
-#' @examples
 save_requests <- function(path = "", suffix = "", type = "json", ...) {
   
   reqs <- make_requests(...)

@@ -15,7 +15,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' make_request(url = "http://localhost.1337, schema = "entries", spec = "sgv", count = 100)
+#' make_request(url = "http://localhost.1337", schema = "entries", spec = "sgv", count = 100)
 #' }
 #' 
 #' 

@@ -5,10 +5,9 @@
 #' @param date_range If date minimum and maximum are not provided, will obtain these from the treatments 
 #' @param tz Expected timezone of users data. Defaults to system timezone. 
 #'
-#' @returns
+#' @returns A data.table with columns by (day) and unix epoch for start of day.
 #' @export
 #'
-#' @examples
 ns_date_range <- function(treatments, date_var = "dttm_local", date_range = NULL, tz = Sys.timezone()) {
   
   if(is.null(date_range)) {
@@ -38,10 +37,9 @@ ns_date_range <- function(treatments, date_var = "dttm_local", date_range = NULL
 #'
 #' @param treatments `data.table` of cleaned Nightscout Care Portal Treatment information.
 #'
-#' @returns
+#' @returns A `data.table` with dates and times of profile switches
 #' @export
 #'
-#' @examples
 ns_extract_profiles <- function(treatments) {
   
   ## Extract profile switches and scheduled basals from treatment information
@@ -68,7 +66,6 @@ ns_extract_profiles <- function(treatments) {
 #' @returns An R `data.table` with columns by (day), start_epoch, end_epoch, and rate (units per hour).
 #' @export
 #'
-#' @examples
 ns_basal_scheduled <- function(treatments) {
   
   profiles_treat <- ns_extract_profiles(treatments)  
@@ -127,7 +124,6 @@ ns_basal_scheduled <- function(treatments) {
 #' @returns An R `data.table` with columns by (day), start_epoch, end_epoch, and rate (units per hour).
 #' @export
 #'
-#' @examples
 ns_basal_temporary <- function(treatments) {
   
   dat_basal_temps <- treatments[
@@ -151,7 +147,6 @@ ns_basal_temporary <- function(treatments) {
 #' @returns An R `data.table` with columns by (day), start_epoch, end_epoch, and units of insulin scheduled and delivered.
 #' @export
 #'
-#' @examples
 ns_basal_total <- function(treatments) {
   
   # Create datasets of scheduled and temporary basals
@@ -230,7 +225,6 @@ ns_basal_total <- function(treatments) {
 #' @returns An R `data.table` with columns by (day), time, bolus type (SMB or manual) and units of insulin delivered.
 #' @export
 #'
-#' @examples
 ns_bolus_total <- function(treatments) {
   
   unknown_as <- match.arg(unknown_as)
@@ -251,11 +245,10 @@ ns_bolus_total <- function(treatments) {
 #'
 #' @param treatments `data.table` of cleaned Nightscout Care Portal Treatment information.
 #'
-#' @returns
+#' @returns An R `data.table` with columns by (day), basal and bolus insulin delivered to match Nightscout dashboard. Calculations aren't exactly the same, not sure why?
 #' @export
 #'
-#' @examples
-ns_insulin_daily <- function(treatments) {
+ns_insulin <- function(treatments) {
   
   # Calculate basal and summarise by day
   dat_basal <- ns_basal_total(treatments)

@@ -33,11 +33,32 @@ devtools::install_github("jwilliman/dbtr")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example to show how to extract treatment information from Nightscout and calculate daily insulin metrics, similar to what is displayed on the Nightscout dashboard.
 
 ```{r example, eval = FALSE}
-# library(dbtr)
-## basic example code
+
+library(dbtr)
+
+# Extract treatment data from Nightscout
+
+treatments <- ns_api_fetch(
+  hostname   = "localhost:1337",
+  filename   = "treatments", filetype = "json", 
+  count      = Inf, 
+  start_date = "2024-04-20",
+  end_date   = "2024-05-04",
+  api_secret = "nightscout_secret",
+  perform    = TRUE) |> 
+  httr2::resp_body_json() |> 
+  data.table::rbindlist(fill = TRUE)
+
+# Clean treatment data, creating local date variables
+ns_clean_treatments(treatments, tz = "Pacific/Auckland")
+
+# Create dataset with insulin delivery data
+ns_insulin(treatments)
+
+
 ```
 
 <!-- What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so: -->
