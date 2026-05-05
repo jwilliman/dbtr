@@ -1,23 +1,31 @@
 #' Create dataset from date range
 #'
-#' @param treatments `data.table` of cleaned Nightscout Care Portal Treatment information. 
-#' @param date_var Name of column containing date variable.
-#' @param date_range If date minimum and maximum are not provided, will obtain these from the treatments 
-#' @param tz Expected timezone of users data. Defaults to system timezone. 
+#' @param x Vector of at least two dates or datetimes, to identify the minimum and maximum dates to be included.
+#' @param tz If x is a date object, a timezone also needs to be provided.
 #'
-#' @returns A data.table with columns by (day) and unix epoch for start of day.
+#' @returns A data.table with columns by (day) and unix epoch for start of day (in local timezone).
 #' @export
 #'
-ns_date_range <- function(treatments, date_var = "dttm_local", date_range = NULL, tz = Sys.timezone()) {
+ns_date_range <- function(x, tz = NULL) {
+
+  assertthat::assert_that(length(x) > 1)
   
-  if(is.null(date_range)) {
-    
-    ## First and last day a treatment was recorded
-    date_range <- treatments[[date_var]] |> 
-      as.Date(tz = tz) |> 
-      range()
+  assertthat::assert_that(
+    assertthat::is.time(x) |
+      (assertthat::is.date(x) & assertthat::not_empty(tz))
+  )
+  
+  # If is time, extract timezone and convert to date
+  if(assertthat::is.time(x)) {
+
+    # (IDate preserves timezone)
+    tz <- attr(x, "tzone")  
+    x <- as.IDate(x)    
     
   }
+
+  ## First and last day a treatment was recorded. 
+  date_range <- range(as.IDate(x)) 
   
   # Dataset with all dates and breakpoints
   dt_dates <- data.table::data.table(
@@ -69,9 +77,7 @@ ns_extract_profiles <- function(treatments) {
 ns_basal_scheduled <- function(treatments) {
   
   profiles_treat <- ns_extract_profiles(treatments)  
-  dt_dates       <- ns_date_range(treatments, tz = "Pacific/Auckland")
-  
-  dt_dates[, start_date := as.POSIXct(epoch, tz = "Pacific/Auckland")]
+  dt_dates       <- ns_date_range(treatments$dttm_local)
   
   ## Combine with all dates to fill in days where profiles don't change.
   profile_switches <- data.table::rbindlist(list(
