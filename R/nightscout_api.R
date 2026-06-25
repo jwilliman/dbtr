@@ -146,7 +146,7 @@ ns_read_file <- function(file) {
     rds <- readRDS(file = file)
     
     treatments <- rds |> 
-      httr2::resp_body_json() |> 
+      jsonlite::fromJSON() |> 
       data.table::rbindlist(fill = TRUE)    
   }
   
