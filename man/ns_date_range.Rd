@@ -4,24 +4,15 @@
 \alias{ns_date_range}
 \title{Create dataset from date range}
 \usage{
-ns_date_range(
-  treatments,
-  date_var = "dttm_local",
-  date_range = NULL,
-  tz = Sys.timezone()
-)
+ns_date_range(x, tz = NULL)
 }
 \arguments{
-\item{treatments}{\code{data.table} of cleaned Nightscout Care Portal Treatment information.}
+\item{x}{Vector of at least two dates or datetimes, to identify the minimum and maximum dates to be included.}
 
-\item{date_var}{Name of column containing date variable.}
-
-\item{date_range}{If date minimum and maximum are not provided, will obtain these from the treatments}
-
-\item{tz}{Expected timezone of users data. Defaults to system timezone.}
+\item{tz}{If x is a date object, a timezone also needs to be provided.}
 }
 \value{
-A data.table with columns by (day) and unix epoch for start of day.
+A data.table with columns by (day) and unix epoch for start of day (in local timezone).
 }
 \description{
 Create dataset from date range

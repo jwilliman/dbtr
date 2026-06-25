@@ -143,7 +143,9 @@ ns_read_file <- function(file) {
     
   } else if(tools::file_ext(file) == "Rds") {
     
-    treatments <- readRDS(file = file) |> 
+    rds <- readRDS(file = file)
+    
+    treatments <- rds |> 
       httr2::resp_body_json() |> 
       data.table::rbindlist(fill = TRUE)    
   }
