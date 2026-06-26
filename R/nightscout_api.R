@@ -157,7 +157,7 @@ ns_read_file <- function(file) {
       
     treatments <- rds |> 
       jsonlite::fromJSON() |> 
-      data.table::rbindlist(fill = TRUE) 
+      as.data.table()
     
     }
   }
