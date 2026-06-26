@@ -145,9 +145,21 @@ ns_read_file <- function(file) {
     
     rds <- readRDS(file = file)
     
+    rds_class <- class(rds)
+    
+    if(rds_class == "httr2_response") {
+   
+      treatments <- rds |> 
+        httr2::resp_body_json() |> 
+        data.table::rbindlist(fill = TRUE)       
+      
+    } else {
+      
     treatments <- rds |> 
       jsonlite::fromJSON() |> 
-      data.table::rbindlist(fill = TRUE)    
+      data.table::rbindlist(fill = TRUE) 
+    
+    }
   }
   
   return(treatments)
